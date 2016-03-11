@@ -1,4 +1,4 @@
-package com.tctam.algorithms.binarysearchtree;
+package com.tctam.algorithms.tree;
 
 import com.tctam.algorithms.symboltable.SymbolTable;
 
