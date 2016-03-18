@@ -1,6 +1,7 @@
 package com.tctam.algorithms.graph;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 import com.tctam.algorithms.queue.LinkedQueue;
 import com.tctam.algorithms.queue.Queue;
@@ -25,14 +26,18 @@ import com.tctam.algorithms.queue.Queue;
 public class BreathFirstSearch implements Search {
 	private int count;
 	private boolean marked[];
+	private int edgeTo[];
 	private Graph g;
 	private Queue<Integer> queue;
+	private int s;
 
 	public BreathFirstSearch(Graph g, int s) {
 		this.g = g;
 		this.count = 0;
 		this.marked = new boolean[g.V()];
+		this.edgeTo = new int[g.V()];
 		this.queue = new LinkedQueue<Integer>();
+		this.s = s;
 		bfs(s);
 	}
 
@@ -46,6 +51,7 @@ public class BreathFirstSearch implements Search {
 				System.out.print(uu + "--");
 				for (int v : g.adj(uu)) {
 					if (!marked(v)) {
+						edgeTo[v] = uu;
 						queue.enqueue(v);
 					}
 				}
@@ -61,6 +67,23 @@ public class BreathFirstSearch implements Search {
 		return count;
 	}
 
+	public boolean hasPath(int v) {
+		return marked[v];
+	}
+
+	public Iterable<Integer> paths(int v) {
+		if (!hasPath(v)) {
+			return null;
+		}
+
+		Stack<Integer> paths = new Stack<Integer>();
+		for (int x = v; x != s; x = edgeTo[x]) {
+			paths.push(x);
+		}
+		paths.push(s);
+		return paths;
+	}
+
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 		int vertices = in.nextInt();
@@ -72,8 +95,14 @@ public class BreathFirstSearch implements Search {
 			g.addEdge(u, v);
 		}
 		System.out.println(g.toString());
-		Search search = new BreathFirstSearch(g, 0);
-		System.out.println("\nNumber of connected vertices is " + search.count());
+		int s = 0;
+		Search search = new BreathFirstSearch(g, s);
+		System.out.println("\nNumber of connected vertices from " + s + " is " + search.count());
+
+		for (int i = 0; i < g.V(); i++) {
+			System.out.println(String.format("Path %s to %s is %s", i, s, search.paths(i)));
+		}
 		in.close();
 	}
+
 }
