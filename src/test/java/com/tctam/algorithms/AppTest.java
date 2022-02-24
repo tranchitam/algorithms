@@ -1,10 +1,13 @@
 package com.tctam.algorithms;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
 
-public class AppTest extends TestCase {
+import org.junit.Test;
 
-	public AppTest(String testName) {
-		super(testName);
-	}
+public class AppTest {
+
+  @Test
+  public void test() {
+    assertTrue(true);
+  }
 }
